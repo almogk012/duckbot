@@ -1,0 +1,13 @@
+.page-layout{
+  height: 100%;
+  background-color: #6080e7;
+  font-family: Roboto;
+}
+.page-layout__viewport {
+  // padding-top: 4rem;
+}
+
+.page-layout__nav-item--active {
+  font-weight: bold;
+  text-decoration: underline;
+}
