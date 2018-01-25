@@ -42,7 +42,7 @@ const mapDispatchToProps = dispatch => {
   return {
     sendMessage: message =>
       dispatch({
-        type: "PERSON_SEND_MESSAGE",
+        type: "PERSON_SEND_MESSAGE ",
         payload: message
       }),
     typingMessage: input =>
