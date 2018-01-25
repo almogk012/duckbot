@@ -60,7 +60,6 @@ const initialState = {
   valueInput:""
 };
 export default function chatReducer(state = initialState, action) {
-  debugger;
   switch (action.type) {
     case "DUCK_SPEAK":
       return Object.assign({}, state, {
