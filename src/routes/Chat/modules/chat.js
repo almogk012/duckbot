@@ -4,6 +4,7 @@
 export const DUCK_SPEAK = "DUCK_SPEAK";
 export const PERSON_SEND_MESSAGE = "PERSON_SEND_MESSAGE";
 export const PERSON_TYPING = "PERSON_TYPING"; 
+import {createNewUser,createUserID,getUserName} from './../../../services/duckbot.service';
 
 // ------------------------------------
 // Actions
@@ -53,6 +54,7 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
+  _currentUser: createNewUser(),
   title_status_navbar: "DUCKBOT is waiting to help",
   user_input_message: "",
   valueInput:""
