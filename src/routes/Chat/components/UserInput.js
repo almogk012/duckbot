@@ -54,7 +54,8 @@ const mapDispatchToProps = dispatch => {
 };
 
 const mapStateToProps = state => ({
-  valueInput: state.chat.valueInput
+  valueInput: state.chat.valueInput,
+  _currentUser: state.chat._currentUser
 });
 UserInput.propTypes = {
   sendMessage: PropTypes.func.isRequired,
