@@ -2,6 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import IconSend from "../assets/ic-send@2x.png";
+import * as inputTypes from "../inputTypes";
+import * as questionsTypes from "../questionsTypes";
+
+// This method gonna decide which type of input this message is
+const exportInputTypeFromMessage = (message) =>{
+  return inputTypes.QUESTION;
+};
 
 let UserInput = ({ sendMessage, typingMessage, valueInput }) => {
   let input;
@@ -11,9 +18,6 @@ let UserInput = ({ sendMessage, typingMessage, valueInput }) => {
       <form
         onSubmit={e => {
           e.preventDefault();
-          if (!input.value.trim()) {
-            return;
-          }
           sendMessage(input.value);
           input.value = "";
         }}
@@ -42,8 +46,11 @@ const mapDispatchToProps = dispatch => {
   return {
     sendMessage: message =>
       dispatch({
-        type: "PERSON_SEND_MESSAGE ",
-        payload: message
+        type: "PERSON_SEND_MESSAGE",
+        payload: {
+          message,
+          inputType: exportInputTypeFromMessage(message)
+        }
       }),
     typingMessage: input =>
       dispatch({

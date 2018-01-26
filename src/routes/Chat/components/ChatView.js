@@ -6,7 +6,7 @@ import UserInput from "./UserInput";
 import StatusNavbar from "./StatusNavbar";
 import SideBar from "./SideBar";
 
-export const Chat = ({}) => (
+export const Chat = ({messages}) => (
   <div className="chat-main">
     <div className="status">
       <StatusNavbar />
@@ -16,72 +16,45 @@ export const Chat = ({}) => (
     </div>
     <div className="main">
       <ol className="chat">
-        <li className="other">
-          <div className="avatar">
-            <div className="image-duckbot" />
-          </div>
-          <div className="msg">
-            <p>
-              Your bones don't break, mine do. That's clear. Your cells react to
-              bacteria and viruses differently than mine. You don't get sick, I
-              do. That's also clear.
-            </p>
-            <time className="other-time">20:17</time>
-          </div>
-        </li>
-        <li className="self">
-          <time className="self-time">20:18</time>
-          <div className="avatar">
-            <img src="https://i.imgur.com/HYcn9xO.png" draggable="false" />
-          </div>
-          <div className="msg">
-            <p>
-              Your bones don't break, mine do. That's clear. Your cells react to
-              bacteria and viruses differently than mine. You don't get sick, I
-              do. That's also clear.
-            </p>
-          </div>
-        </li>
-        <li className="other">
-          <div className="avatar">
-            <div className="image-duckbot" />
-          </div>
-          <div className="msg">
-            <p>Hello ! Hello</p>
-            <time className="other-time">20:17</time>
-          </div>
-        </li>
-        <div className="day">Hoy</div>
-        <li className="self">
-          <time className="self-time">18:03</time>
-          <div className="avatar">
-            <img src="https://i.imgur.com/HYcn9xO.png" draggable="false" />
-          </div>
-          <div className="msg">
-            <p>
-              Your bones don't break, mine do. That's clear. Your cells react to
-              bacteria and viruses differently than mine. You don't get sick, I
-              do. That's also clear.
-            </p>
-          </div>
-        </li>
-        <li className="other">
-          <div className="avatar">
-            <div className="image-duckbot" />
-          </div>
-          <div className="msg">
-            <p>Venga va, hace ya mucho que no juego...</p>
-            <time className="other-time">18:07</time>
-          </div>
-        </li>
+      {
+        Object.keys(messages).map(function(key,i){
+            return ( 
+              <div key={"Dialogue number " + i}>
+                  { messages[key].bot ?   
+                       <li className="other">
+                       <div className="avatar">
+                         <div className="image-duckbot" />
+                       </div>
+                         <div className="msg">
+                           <p>
+                           {messages[key].bot[0].text}
+                           </p>
+                           <time className="other-time">{messages[key].bot[0].time}</time>
+                          </div>
+                        </li>  : null }
+                  { messages[key].user ?
+                       <li className="self">
+                       <time className="self-time">{messages[key].user[0].time}</time>
+                       <div className="avatar">
+                       <img src="https://i.imgur.com/HYcn9xO.png" draggable="false" />
+                       </div>
+                       <div className="msg">
+                        <p>
+                          {messages[key].user[0].text}
+                        </p>
+                       </div>
+                       </li> : null }
+              </div>
+            )
+        })
+      }
       </ol>
     </div>
     <UserInput />
   </div>
 );
-// Chat.propTypes = {
-//   chat: PropTypes.string.isRequired,
-//   title_status_navbar: PropTypes.string.isRequired
-// };
+Chat.propTypes = {
+  messages: PropTypes.object.isRequired
+};
 
 export default Chat;
