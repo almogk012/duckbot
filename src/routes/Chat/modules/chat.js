@@ -5,7 +5,10 @@ export const DUCK_SPEAK = "DUCK_SPEAK";
 export const PERSON_SEND_MESSAGE = "PERSON_SEND_MESSAGE";
 export const PERSON_TYPING = "PERSON_TYPING";
 import {createNewUser,createUserID,getUserName} from './../../../services/user';
-import {getMessages, pushMessage,createMessageUser,prettyDate2} from './../../../services/messages';
+import {createAnswerMessageUser,createQuestionMessageUser,UserPushMessage} from './../../../services/UserMessage';
+import {prettyDate2} from './../../../services/general';
+import {getMessages,pushMessage} from './../../../services/messages';
+import {duckbotAskForName} from './../../../services/DuckbotMessage';
 import * as inputTypes from '../inputTypes';
 
 // ------------------------------------
@@ -32,13 +35,24 @@ export default function chatReducer(state = initialState, action) {
       switch (action.payload.inputType) {
         // Here you gonna change the state by user input type
         case inputTypes.QUESTION :{
-          console.log("is question")
+          console.log("is question");
           let time = prettyDate2();
-          let msg = createMessageUser(action.payload.message,time);
-          pushMessage(msg);
+          let msg = createQuestionMessageUser(action.payload.message,time);
+          UserPushMessage(msg);
+          return Object.assign({}, state, {
+            messages: getMessages()
+          });
           break;
         } case inputTypes.ANSWER :{
-          console.log("is answer")
+
+          console.log("is answer");
+          let time = prettyDate2();
+          getUserName(action.payload.message);
+          let msg = createAnswerMessageUser(action.payload.message,time);
+          UserPushMessage(msg);
+          return Object.assign({}, state, {
+            messages:  getMessages()
+          });
         } default : {
           console.log("default input")
         }

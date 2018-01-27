@@ -7,7 +7,12 @@ import * as questionsTypes from "../questionsTypes";
 
 // This method gonna decide which type of input this message is
 const exportInputTypeFromMessage = (message) =>{
-  return inputTypes.QUESTION;
+  if(message.slice(-1) === '?'){
+    debugger;
+    return inputTypes.QUESTION;
+  } else {
+    return inputTypes.ANSWER 
+  }
 };
 
 let UserInput = ({ sendMessage, typingMessage, valueInput }) => {
