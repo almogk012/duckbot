@@ -7,26 +7,27 @@ import {createID,prettyDate2} from './general';
 import {getMessages,pushMessage} from './messages';
 
 let messages = getMessages();
-let date = prettyDate2();
 
-export function createQuestionMessageUser(msg,time){
+export function createQuestionMessageUser(msg){
+  let date = prettyDate2();
   let numberDialogue = createID();
   return {
     [numberDialogue]: {
       user:{
           text:msg,
-          time:time
+          time:date
         }
     }
   }
 }
-export function createAnswerMessageUser(msg,time){
+export function createAnswerMessageUser(msg){
+  let date = prettyDate2();
   let numberDialogue = createID();
   return {
     [numberDialogue]: {
       user:{
           text:msg,
-          time:time
+          time:date
         }
     }
   }

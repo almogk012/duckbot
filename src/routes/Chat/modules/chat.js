@@ -4,12 +4,13 @@
 export const DUCK_SPEAK = "DUCK_SPEAK";
 export const PERSON_SEND_MESSAGE = "PERSON_SEND_MESSAGE";
 export const PERSON_TYPING = "PERSON_TYPING";
-import {createNewUser,createUserID,getUserName} from './../../../services/user';
+import {createNewUser,createUserID,setUserName,setUserCountry} from './../../../services/user';
 import {createAnswerMessageUser,createQuestionMessageUser,UserPushMessage} from './../../../services/UserMessage';
 import {prettyDate2} from './../../../services/general';
 import {getMessages,pushMessage} from './../../../services/messages';
-import {duckbotAskForName} from './../../../services/DuckbotMessage';
+import {duckbotAskForCountry, duckbotAskForName,duckbotSayDetails} from './../../../services/DuckbotMessage';
 import * as inputTypes from '../inputTypes';
+import * as questionsTypes from "../questionsTypes";
 
 // ------------------------------------
 // Reducer
@@ -18,7 +19,8 @@ const initialState = {
   _currentUser: createNewUser(),
   title_status_navbar: "DUCKBOT is waiting to help",
   valueInput:"",
-  messages: getMessages()
+  messages: getMessages(),
+  statusQuestions: questionsTypes.GET_NAME
 };
 export default function chatReducer(state = initialState, action) {
   switch (action.type) {
@@ -36,28 +38,50 @@ export default function chatReducer(state = initialState, action) {
         // Here you gonna change the state by user input type
         case inputTypes.QUESTION :{
           console.log("is question");
-          let time = prettyDate2();
-          let msg = createQuestionMessageUser(action.payload.message,time);
+          let msg = createQuestionMessageUser(action.payload.message);
           UserPushMessage(msg);
           return Object.assign({}, state, {
             messages: getMessages()
           });
           break;
         } case inputTypes.ANSWER :{
-
           console.log("is answer");
-          let time = prettyDate2();
-          getUserName(action.payload.message);
-          let msg = createAnswerMessageUser(action.payload.message,time);
-          UserPushMessage(msg);
-          return Object.assign({}, state, {
-            messages:  getMessages()
-          });
+          switch(state.statusQuestions){
+            case questionsTypes.GET_NAME:{
+              console.log("is GET_NAME");
+              setUserName(action.payload.message);
+              let msg = createAnswerMessageUser(action.payload.message);
+              UserPushMessage(msg);
+              duckbotAskForCountry();
+              state.statusQuestions = questionsTypes.GET_COUNTRY;
+              return Object.assign({}, state, {
+                messages:  getMessages()
+              });
+            }
+            case questionsTypes.GET_COUNTRY:{
+              console.log("is GET_COUNTRY");
+              setUserCountry(action.payload.message);
+              let msg = createAnswerMessageUser(action.payload.message);
+              UserPushMessage(msg);
+              duckbotSayDetails();
+              return Object.assign({}, state, {
+                messages:  getMessages()
+              });
+            }
+          }
+          console.log("is answer");
         } default : {
           console.log("default input")
         }
       }
+      case "@@INIT":{
+        duckbotAskForName();
+        return Object.assign({}, state, {
+          messages:  getMessages()
+        });
+      }
     default:
+   
       return state;
   }
   // const handler = ACTION_HANDLERS[action.type];

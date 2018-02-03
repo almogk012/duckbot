@@ -23,8 +23,11 @@ export function createNewUser(){
 export function getCurrentUser(){
   return _user;
 }
-export function getUserName(name){
+export function setUserName(name){
   _user.name = name;
 
   // here action finish add name .
+}
+export function setUserCountry(country){
+  _user.country = country;
 }

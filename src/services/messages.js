@@ -3,9 +3,9 @@ import {duckbotAskForName} from './DuckbotMessage';
 let messages = {};
 
 export function getMessages(){
-  if(_.isEmpty(messages)){
-    duckbotAskForName();
-  }
+  // if(_.isEmpty(messages)){
+  //   duckbotAskForName();
+  // }
   return Object.assign({},messages);
  }
 
