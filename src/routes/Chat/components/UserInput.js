@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import IconSend from "../assets/ic-send@2x.png";
 import * as inputTypes from "../inputTypes";
-import * as questionsTypes from "../questionsTypes";
-
+import * as questionWords from "../questionWords";
 // This method gonna decide which type of input this message is
 const exportInputTypeFromMessage = (message) =>{
   if(message.slice(-1) === '?'){
-    debugger;
+    return inputTypes.QUESTION;
+  } else if(new RegExp(questionWords.questionWords.join("|")).test(message.toLowerCase())){
     return inputTypes.QUESTION;
   } else {
     return inputTypes.ANSWER 
