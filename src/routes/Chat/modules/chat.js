@@ -1,6 +1,3 @@
-// ------------------------------------
-// Constants
-// ------------------------------------
 export const DUCK_SPEAK = "DUCK_SPEAK";
 export const PERSON_SEND_MESSAGE = "PERSON_SEND_MESSAGE";
 export const PERSON_TYPING = "PERSON_TYPING";
@@ -8,7 +5,7 @@ import {createNewUser,createUserID,setUserName,setUserCountry} from './../../../
 import {createAnswerMessageUser,createQuestionMessageUser,UserPushMessage} from './../../../services/UserMessage';
 import {prettyDate2} from './../../../services/general';
 import {getMessages,pushMessage} from './../../../services/messages';
-import {duckbotAskForCountry, duckbotAskForName,duckbotSayDetails} from './../../../services/DuckbotMessage';
+import {duckbotAskForCountry, duckbotAskForName,duckbotSayDetails,duckbotAnswerDefault} from './../../../services/DuckbotMessage';
 import * as inputTypes from '../inputTypes';
 import * as questionsTypes from "../questionsTypes";
 
@@ -64,13 +61,22 @@ export default function chatReducer(state = initialState, action) {
               let msg = createAnswerMessageUser(action.payload.message);
               UserPushMessage(msg);
               duckbotSayDetails();
+              state.statusQuestions = questionsTypes.NO_QUESTION;
+              return Object.assign({}, state, {
+                messages:  getMessages()
+              });
+            }
+            case questionsTypes.NO_QUESTION :{
+              let msg = createAnswerMessageUser(action.payload.message);
+              UserPushMessage(msg);
+              duckbotAnswerDefault();
               return Object.assign({}, state, {
                 messages:  getMessages()
               });
             }
           }
-          console.log("is answer");
         } default : {
+          duckbotAnswerDefault();          
           console.log("default input")
         }
       }
@@ -84,7 +90,4 @@ export default function chatReducer(state = initialState, action) {
    
       return state;
   }
-  // const handler = ACTION_HANDLERS[action.type];
-
-  // return handler ? handler(state, action) : state;
 }
