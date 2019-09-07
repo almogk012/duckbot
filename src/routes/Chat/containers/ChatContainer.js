@@ -12,7 +12,9 @@ const mapDispatchToProps = dispatch => {
 };
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    messages: state.chat.messages
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat);

@@ -3,52 +3,10 @@
 // ------------------------------------
 export const DUCK_SPEAK = "DUCK_SPEAK";
 export const PERSON_SEND_MESSAGE = "PERSON_SEND_MESSAGE";
-export const PERSON_TYPING = "PERSON_TYPING"; 
-import {createNewUser,createUserID,getUserName} from './../../../services/duckbot.service';
-
-// ------------------------------------
-// Actions
-// ------------------------------------
-
-// export const addTodo = text => {
-//   return {
-//     type: "ADD_TODO",
-//     id: nextTodoId++,
-//     text
-//   };
-// };
-// export const sendMessage = message => {
-//   return {
-//     type: PERSON_SPEAK,
-//     payload: message
-//   };
-// };
-
-// export const sendMessage = (a, b, c) => {
-//   debugger;
-//   return (dispatch, getState) => {
-//     dispatch({
-//       type: PERSON_SPEAK,
-//       payload: getState().userMessage
-//     });
-//   };
-// };
-
-/*  This is a thunk, meaning it is a function that immediately
-    returns a function for lazy evaluation. It is incredibly useful for
-    creating async actions, especially when combined with redux-thunk! */
-
-// export const actions = {
-//   sendMessage
-// };
-
-// ------------------------------------
-// Action Handlers
-// ------------------------------------
-const ACTION_HANDLERS = {
-  [DUCK_SPEAK]: (state, action) => state,
-  [PERSON_SEND_MESSAGE]: (state, action) => state
-};
+export const PERSON_TYPING = "PERSON_TYPING";
+import {createNewUser,createUserID,getUserName} from './../../../services/user';
+import {getMessages, pushMessage,createMessageUser,prettyDate2} from './../../../services/messages';
+import * as inputTypes from '../inputTypes';
 
 // ------------------------------------
 // Reducer
@@ -56,11 +14,10 @@ const ACTION_HANDLERS = {
 const initialState = {
   _currentUser: createNewUser(),
   title_status_navbar: "DUCKBOT is waiting to help",
-  user_input_message: "",
-  valueInput:""
+  valueInput:"",
+  messages: getMessages()
 };
 export default function chatReducer(state = initialState, action) {
-  debugger;
   switch (action.type) {
     case "DUCK_SPEAK":
       return Object.assign({}, state, {
@@ -72,11 +29,20 @@ export default function chatReducer(state = initialState, action) {
       title_status_navbar : "DUCKBOT is listening ..."
     });
     case "PERSON_SEND_MESSAGE":
-      return Object.assign({}, state, {
-        user_input_message: action.payload,
-        title_status_navbar : "DUCKBOT is typing ..."
-      });
-
+      switch (action.payload.inputType) {
+        // Here you gonna change the state by user input type
+        case inputTypes.QUESTION :{
+          console.log("is question")
+          let time = prettyDate2();
+          let msg = createMessageUser(action.payload.message,time);
+          pushMessage(msg);
+          break;
+        } case inputTypes.ANSWER :{
+          console.log("is answer")
+        } default : {
+          console.log("default input")
+        }
+      }
     default:
       return state;
   }
